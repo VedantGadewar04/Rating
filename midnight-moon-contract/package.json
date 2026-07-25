@@ -1,5 +1,5 @@
 {
-  "name": "@midnight-ntwrk/bboard-contract",
+  "name": "@midnight-ntwrk/midnight-moon-contract",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -13,9 +13,9 @@
     }
   },
   "scripts": {
-    "build": "rm -rf dist && tsc --project tsconfig.build.json && cp -Rf ./src/managed ./dist/managed && cp ./src/bboard.compact ./dist",
+    "build": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\" && tsc --project tsconfig.build.json && node -e \"require('fs').cpSync('./src/managed', './dist/managed', { recursive: true })\" && node -e \"require('fs').cpSync('./src/midnightmoon.compact', './dist/midnightmoon.compact')\"",
     "ci": "npm run compact && npm run typecheck && npm run lint && npm run build && npm run test",
-    "compact": "compact compile src/bboard.compact ./src/managed/bboard",
+    "compact": "bash -c \"~/.local/bin/compact compile src/midnightmoon.compact ./src/managed/midnightmoon\"",
     "lint": "eslint src",
     "prepack": "npm build",
     "test": "vitest",

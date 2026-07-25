@@ -18,7 +18,7 @@ import {
   type BBoardCircuitKeys,
   type BBoardProviders,
   type DeployedBBoardAPI,
-} from '../../../api/src/index';
+} from '../../../midnight-moon-api/src/index';
 import { type ContractAddress, fromHex, toHex } from '@midnight-ntwrk/midnight-js-protocol/compact-runtime';
 import {
   BehaviorSubject,
@@ -49,7 +49,7 @@ import {
   Transaction,
   TransactionId,
 } from '@midnight-ntwrk/midnight-js-protocol/ledger';
-import { BBoardPrivateState } from '@midnight-ntwrk/bboard-contract';
+import { BBoardPrivateState } from '@midnight-ntwrk/midnight-moon-contract';
 import { inMemoryPrivateStateProvider } from '../in-memory-private-state-provider';
 import { NetworkId } from '@midnight-ntwrk/midnight-js-network-id';
 import type { UnboundTransaction } from '@midnight-ntwrk/midnight-js-types';

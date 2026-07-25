@@ -1,0 +1,58 @@
+// Midnight Moon DApp Smart Contract
+// Lowercase file: midnightmoon.compact
+
+pragma language_version 0.23;
+
+import CompactStandardLibrary;
+
+// Public ledger state
+// Maps a lunar sector ID (hash coordinates) to its claim status
+export ledger claimed_sectors: Map<Bytes<32>, Boolean>;
+// Maps a lunar sector ID to the owner's verification commitment
+export ledger commitments: Map<Bytes<32>, Bytes<32>>;
+
+constructor() {
+  // Empty constructor. Ledger Map items default to empty.
+}
+
+// Private witness for generating zero-knowledge proof
+witness localSecretKey(): Bytes<32>;
+
+// Claim a sector on the Moon
+export circuit claim_sector(sector_id: Bytes<32>, secret: Bytes<32>): [] {
+  // Verify that the sector is not currently claimed
+  if (claimed_sectors.member(disclose(sector_id))) {
+    assert(!claimed_sectors.lookup(disclose(sector_id)), "Sector is already claimed");
+  }
+
+  // Create a ZK commitment derived from the secret key and sector ID
+  const comm = commitment(secret, sector_id);
+
+  // Store the ownership status and proof commitment on the public ledger
+  claimed_sectors.insert(disclose(sector_id), true);
+  commitments.insert(disclose(sector_id), disclose(comm));
+}
+
+// Release a sector (returns it to public pool if owner secret matches)
+export circuit release_sector(sector_id: Bytes<32>, secret: Bytes<32>): [] {
+  // Verify that the sector is claimed
+  assert(claimed_sectors.member(disclose(sector_id)), "Sector is not claimed");
+  assert(claimed_sectors.lookup(disclose(sector_id)), "Sector is not claimed");
+
+  // Re-generate commitment and prove ownership without disclosing secret
+  const comm = commitment(secret, sector_id);
+  assert(commitments.lookup(disclose(sector_id)) == comm, "Invalid secret key: Not the owner");
+
+  // Mark the sector as unclaimed (false) and erase commitment on-chain
+  claimed_sectors.insert(disclose(sector_id), false);
+  commitments.insert(disclose(sector_id), pad(32, ""));
+}
+
+// Helper to compute a cryptographically private commitment
+export circuit commitment(secret: Bytes<32>, sector_id: Bytes<32>): Bytes<32> {
+  return persistentHash<Vector<3, Bytes<32>>>([
+    pad(32, "midnightmoon:"),
+    sector_id,
+    secret
+  ]);
+}

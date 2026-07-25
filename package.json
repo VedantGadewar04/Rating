@@ -10,11 +10,15 @@
   },
   "workspaces": {
     "packages": [
-      "bboard-cli",
-      "bboard-ui",
-      "api",
-      "contract"
+      "midnight-moon-cli",
+      "midnight-moon-ui",
+      "midnight-moon-api",
+      "midnight-moon-contract"
     ]
+  },
+  "scripts": {
+    "compact": "npm run compact --workspace=@midnight-ntwrk/midnight-moon-contract",
+    "build": "npm run build --workspaces"
   },
   "dependencies": {
     "@midnight-ntwrk/dapp-connector-api": "4.0.1",

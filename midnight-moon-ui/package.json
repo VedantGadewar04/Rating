@@ -1,13 +1,13 @@
 {
-  "name": "@midnight-ntwrk/bboard-ui",
+  "name": "@midnight-ntwrk/midnight-moon-ui",
   "version": "0.1.0",
   "author": "IOG",
   "license": "MIT",
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "rm -rf ./dist && tsc && vite build --mode preprod && cp -r ../contract/src/managed/bboard/keys ./dist/keys && cp -r ../contract/src/managed/bboard/zkir ./dist/zkir",
-    "build:preview": "rm -rf ./dist && tsc && vite build --mode preview && cp -r ../contract/src/managed/bboard/keys ./dist/keys && cp -r ../contract/src/managed/bboard/zkir ./dist/zkir",
+    "build": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\" && tsc && vite build --mode preprod && node -e \"require('fs').cpSync('../midnight-moon-contract/src/managed/midnightmoon/keys', 'dist/keys', { recursive: true })\" && node -e \"require('fs').cpSync('../midnight-moon-contract/src/managed/midnightmoon/zkir', 'dist/zkir', { recursive: true })\"",
+    "build:preview": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\" && tsc && vite build --mode preview && node -e \"require('fs').cpSync('../midnight-moon-contract/src/managed/midnightmoon/keys', 'dist/keys', { recursive: true })\" && node -e \"require('fs').cpSync('../midnight-moon-contract/src/managed/midnightmoon/zkir', 'dist/zkir', { recursive: true })\"",
     "build:start": "npm run build && npm run start",
     "build:start:preview": "npm run build:preview && npm run start",
     "ci": "npm run typecheck && npm run lint",
